@@ -286,11 +286,15 @@ Sets text properties:
                            'rainbow-blocks-unmatched-face
                          (rainbow-blocks-depth-face depth)))
            (end-pos    (save-excursion (goto-char loc)
-                                    (forward-sexp)
-                                    (point))))
-      (add-text-properties loc end-pos
-                           `(font-lock-face ,delim-face
-                                            rear-nonsticky t)))))
+                                       (forward-sexp)
+                                       (point))))
+      (if (or (get-char-property loc 'read-face-name)
+              (get-char-property loc 'face))
+          (rainbow-blocks-unpropertize-delimiter loc)
+        ;; else
+        (add-text-properties loc end-pos
+                             `(font-lock-face ,delim-face
+                                              rear-nonsticky t))))))
 
 
 (defsubst rainbow-blocks-unpropertize-delimiter (loc)
